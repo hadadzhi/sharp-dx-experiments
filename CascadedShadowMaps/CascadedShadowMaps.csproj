@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6E0FCB24-E78C-4935-A1D7-D44A71E2A98F}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CascadedShadowMaps</RootNamespace>
+    <AssemblyName>CascadedShadowMaps</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>0</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="SharpDX">
+      <HintPath>..\Lib\SharpDX\2.6.3\DirectX11_2-net40\SharpDX.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.D3DCompiler">
+      <HintPath>..\Lib\SharpDX\2.6.3\DirectX11_2-net40\SharpDX.D3DCompiler.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct3D11">
+      <HintPath>..\Lib\SharpDX\2.6.3\DirectX11_2-net40\SharpDX.Direct3D11.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.DXGI">
+      <HintPath>..\Lib\SharpDX\2.6.3\DirectX11_2-net40\SharpDX.DXGI.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AABB.cs" />
+    <Compile Include="CSMDemo.cs" />
+    <Compile Include="CSMCameraFrustum.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Models\skull.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shaders\BasicRenderer.hlsl" />
+    <Content Include="Shaders\HDR.hlsl" />
+    <Content Include="Textures\eve.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Textures\wood.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="app.config" />
+    <None Include="Textures\sand.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shaders\Common.hlsl" />
+    <None Include="Shaders\Lighting.hlsl" />
+    <None Include="Shaders\ShadowMapping.hlsl" />
+    <None Include="Textures\sphere.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Textures\floor.dds">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Textures\cyl.dds">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SharpDX Commons\SharpDXCommons.csproj">
+      <Project>{d6d2aa9b-5cdf-4089-adc8-2a29e92631da}</Project>
+      <Name>SharpDXCommons</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpSMAA\SharpSMAA.csproj">
+      <Project>{f77d8f7c-1874-49d8-94fa-a26be9dace98}</Project>
+      <Name>SharpSMAA</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>fxc "$(ProjectDir)Shaders\BasicRenderer.hlsl" /Od /Zi /Gfp /T vs_5_0 /E VS /Fo "$(ProjectDir)$(OutDir)BasicVS.shd" /Fc "$(ProjectDir)$(OutDir)BasicVS.cod"
+fxc "$(ProjectDir)Shaders\BasicRenderer.hlsl" /Od /Zi /Gfp /T ps_5_0 /E PS /Fo "$(ProjectDir)$(OutDir)BasicPS.shd" /Fc "$(ProjectDir)$(OutDir)BasicPS.cod"
+
+fxc "$(ProjectDir)Shaders\BasicRenderer.hlsl" /Od /Zi /Gfp /T vs_5_0 /E OverlayVS /Fo "$(ProjectDir)$(OutDir)OverlayVS.shd"
+fxc "$(ProjectDir)Shaders\BasicRenderer.hlsl" /Od /Zi /Gfp /T ps_5_0 /E OverlayPS /Fo "$(ProjectDir)$(OutDir)OverlayPS.shd"
+
+fxc "$(ProjectDir)Shaders\ShadowMapping.hlsl" /Od /Zi /Gfp /T vs_5_0 /E VSShadow /Fo "$(ProjectDir)$(OutDir)ShadowMapVS.shd"
+fxc "$(ProjectDir)Shaders\ShadowMapping.hlsl" /Od /Zi /Gfp /T gs_5_0 /E GSCloning /Fo "$(ProjectDir)$(OutDir)CloningGS.shd"
+fxc "$(ProjectDir)Shaders\ShadowMapping.hlsl" /Od /Zi /Gfp /T gs_5_0 /E GSInstancing /Fo "$(ProjectDir)$(OutDir)InstancingGS.shd"
+
+fxc "$(ProjectDir)Shaders\HDR.hlsl" /Od /Zi /Gfp /T vs_5_0 /E ToneMappingVS /Fo "$(ProjectDir)$(OutDir)ToneMappingVS.shd"
+fxc "$(ProjectDir)Shaders\HDR.hlsl" /Od /Zi /Gfp /T ps_5_0 /E ToneMappingPS /Fo "$(ProjectDir)$(OutDir)ToneMappingPS.shd"
+</PreBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

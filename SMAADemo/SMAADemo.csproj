@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D2D39B8D-CEAE-4D19-B692-21DEF9CE9705}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SMAADemo</RootNamespace>
+    <AssemblyName>SMAADemo</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="SharpDX">
+      <HintPath>..\Lib\SharpDX\2.6.3\DirectX11_2-net40\SharpDX.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.D3DCompiler">
+      <HintPath>..\Lib\SharpDX\2.6.3\DirectX11_2-net40\SharpDX.D3DCompiler.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct3D11">
+      <HintPath>..\Lib\SharpDX\2.6.3\DirectX11_2-net40\SharpDX.Direct3D11.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.DXGI">
+      <HintPath>..\Lib\SharpDX\2.6.3\DirectX11_2-net40\SharpDX.DXGI.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SMAADemo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SharpDX Commons\SharpDXCommons.csproj">
+      <Project>{d6d2aa9b-5cdf-4089-adc8-2a29e92631da}</Project>
+      <Name>SharpDXCommons</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpSMAA\SharpSMAA.csproj">
+      <Project>{f77d8f7c-1874-49d8-94fa-a26be9dace98}</Project>
+      <Name>SharpSMAA</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Shaders\SharpDX_SMAA.hlsl" />
+    <Content Include="Shaders\SMAA_modified.hlsl" />
+    <Content Include="Textures\AreaTexDX10.dds">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Textures\SearchTex.dds">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>fxc "$(ProjectDir)Shaders\SharpDX_SMAA.hlsl" /O3 /T vs_4_1 /E SharpDX_SMAAEdgeDetectionVS /Fo "$(ProjectDir)$(OutDir)SharpDX_SMAAEdgeDetectionVS.shd" /Fc "$(ProjectDir)$(OutDir)SharpDX_SMAAEdgeDetectionVS.cod"
+fxc "$(ProjectDir)Shaders\SharpDX_SMAA.hlsl" /O3 /T vs_4_0 /E SharpDX_SMAABlendingWeightCalculationVS /Fo "$(ProjectDir)$(OutDir)SharpDX_SMAABlendingWeightCalculationVS.shd" /Fc "$(ProjectDir)$(OutDir)SharpDX_SMAABlendingWeightCalculationVS.cod"
+fxc "$(ProjectDir)Shaders\SharpDX_SMAA.hlsl" /O3 /T vs_4_1 /E SharpDX_SMAANeighborhoodBlendingVS /Fo "$(ProjectDir)$(OutDir)SharpDX_SMAANeighborhoodBlendingVS.shd" /Fc "$(ProjectDir)$(OutDir)SharpDX_SMAANeighborhoodBlendingVS.cod"
+fxc "$(ProjectDir)Shaders\SharpDX_SMAA.hlsl" /O3 /T vs_4_1 /E SharpDX_SMAAResolveVS /Fo "$(ProjectDir)$(OutDir)SharpDX_SMAAResolveVS.shd" /Fc "$(ProjectDir)$(OutDir)SharpDX_SMAAResolveVS.cod"
+fxc "$(ProjectDir)Shaders\SharpDX_SMAA.hlsl" /O3 /T vs_4_1 /E SharpDX_SMAASeparateVS /Fo "$(ProjectDir)$(OutDir)SharpDX_SMAASeparateVS.shd" /Fc "$(ProjectDir)$(OutDir)SharpDX_SMAASeparateVS.cod"
+
+fxc "$(ProjectDir)Shaders\SharpDX_SMAA.hlsl" /O3 /T ps_4_1 /E SharpDX_SMAALumaEdgeDetectionPS /Fo "$(ProjectDir)$(OutDir)SharpDX_SMAALumaEdgeDetectionPS.shd" /Fc "$(ProjectDir)$(OutDir)SharpDX_SMAALumaEdgeDetectionPS.cod"
+fxc "$(ProjectDir)Shaders\SharpDX_SMAA.hlsl" /O3 /T ps_4_1 /E SharpDX_SMAAColorEdgeDetectionPS /Fo "$(ProjectDir)$(OutDir)SharpDX_SMAAColorEdgeDetectionPS.shd" /Fc "$(ProjectDir)$(OutDir)SharpDX_SMAAColorEdgeDetectionPS.cod"
+fxc "$(ProjectDir)Shaders\SharpDX_SMAA.hlsl" /O3 /T ps_4_1 /E SharpDX_SMAADepthEdgeDetectionPS /Fo "$(ProjectDir)$(OutDir)SharpDX_SMAADepthEdgeDetectionPS.shd" /Fc "$(ProjectDir)$(OutDir)SharpDX_SMAADepthEdgeDetectionPS.cod"
+fxc "$(ProjectDir)Shaders\SharpDX_SMAA.hlsl" /O3 /T ps_4_0 /E SharpDX_SMAABlendingWeightCalculationPS /Fo "$(ProjectDir)$(OutDir)SharpDX_SMAABlendingWeightCalculationPS.shd" /Fc "$(ProjectDir)$(OutDir)SharpDX_SMAABlendingWeightCalculationPS.cod"
+fxc "$(ProjectDir)Shaders\SharpDX_SMAA.hlsl" /O3 /T ps_4_1 /E SharpDX_SMAANeighborhoodBlendingPS /Fo "$(ProjectDir)$(OutDir)SharpDX_SMAANeighborhoodBlendingPS.shd" /Fc "$(ProjectDir)$(OutDir)SharpDX_SMAANeighborhoodBlendingPS.cod"
+fxc "$(ProjectDir)Shaders\SharpDX_SMAA.hlsl" /O3 /T ps_4_1 /E SharpDX_SMAAResolvePS /Fo "$(ProjectDir)$(OutDir)SharpDX_SMAAResolvePS.shd" /Fc "$(ProjectDir)$(OutDir)SharpDX_SMAAResolvePS.cod"
+fxc "$(ProjectDir)Shaders\SharpDX_SMAA.hlsl" /O3 /T ps_4_1 /E SharpDX_SMAASeparatePS /Fo "$(ProjectDir)$(OutDir)SharpDX_SMAASeparatePS.shd" /Fc "$(ProjectDir)$(OutDir)SharpDX_SMAASeparatePS.cod"
+</PreBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
